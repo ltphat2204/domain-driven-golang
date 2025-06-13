@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 	"github.com/ltphat2204/domain-driven-golang/application"
+	"github.com/ltphat2204/domain-driven-golang/dto"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,10 +17,7 @@ func NewTaskHandler(service application.TaskService) *TaskHandler {
 }
 
 func (h *TaskHandler) CreateTask(c *gin.Context) {
-	var input struct {
-		Title       string `json:"title" binding:"required"`
-		Description string `json:"description"`
-	}
+	var input dto.TaskCreateDTO
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -66,11 +64,7 @@ func (h *TaskHandler) UpdateTask(c *gin.Context) {
 		return
 	}
 
-	var input struct {
-		Title       string `json:"title" binding:"required"`
-		Description string `json:"description"`
-		Status      string `json:"status" binding:"required"`
-	}
+	var input dto.TaskUpdateDTO
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -96,6 +90,6 @@ func (h *TaskHandler) DeleteTask(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	
+
 	c.JSON(http.StatusOK, gin.H{"message": "Task deleted"})
 }

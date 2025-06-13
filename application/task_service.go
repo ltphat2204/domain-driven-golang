@@ -9,7 +9,7 @@ type TaskService interface {
 	CreateTask(ctx context.Context, title, description string) (*domain.Task, error)
 	GetTaskByID(ctx context.Context, id uint) (*domain.Task, error)
 	GetAllTasks(ctx context.Context) ([]*domain.Task, error)
-	UpdateTask(ctx context.Context, id uint, title, description, status string) (*domain.Task, error)
+	UpdateTask(ctx context.Context, id uint, title, description, status *string) (*domain.Task, error)
 	DeleteTask(ctx context.Context, id uint) error
 }
 
@@ -38,14 +38,20 @@ func (s *taskService) GetAllTasks(ctx context.Context) ([]*domain.Task, error) {
 	return s.repo.FindAll(ctx)
 }
 
-func (s *taskService) UpdateTask(ctx context.Context, id uint, title, description, status string) (*domain.Task, error) {
+func (s *taskService) UpdateTask(ctx context.Context, id uint, title, description, status *string) (*domain.Task, error) {
 	task, err := s.repo.FindByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
-	task.Title = title
-	task.Description = description
-	task.Status = status
+	if title != nil && *title != "" {
+		task.Title = *title
+	}
+	if description != nil {
+		task.Description = *description
+	}
+	if status != nil && *status != "" {
+		task.Status = *status
+	}
 	return s.repo.Update(ctx, task)
 }
 
