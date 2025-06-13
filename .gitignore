@@ -1,0 +1,52 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Go specific
+bin/
+pkg/
+*.test
+*.out
+*.prof
+
+# Dependency directories (managed by Go modules)
+vendor/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# IDE and editor files
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Test coverage
+coverage.txt
+
+# Build artifacts
+dist/
+build/
+
+# Temporary files
+tmp/
+temp/
+
+# Go module cache
+$GOPATH/pkg/mod/
