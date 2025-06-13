@@ -34,6 +34,7 @@ help:
 	@echo "  Development & Building "
 	@echo "--------------------------"
 	@echo "  run           Run the Go application locally."
+	@echo "  tidy          Ensure Go modules are tidy."
 	@echo "  build         Build the Go application."
 	@echo "  test          Run all Go tests."
 	@echo "  clean-build   Remove build artifacts."
@@ -64,6 +65,12 @@ run: postgres
 	@echo "==> Note: Your service must be configured to connect to localhost:$(DB_PORT)."
 	@go run main.go
 
+## tidy: Ensure Go modules are tidy.
+tidy:
+	@echo "==> Ensuring Go modules are tidy..."
+	@go mod tidy
+	@echo "==> Go modules are tidy."
+
 ## build: Build the Go application.
 build:
 	@echo "==> Building application '$(SERVICE_NAME)'..."
@@ -90,7 +97,7 @@ clean-build:
 ## postgres: Start the local PostgreSQL container if stopped, or create it if it doesn’t exist.
 postgres:
 	@echo "==> Ensuring local PostgreSQL container '$(DB_CONTAINER_NAME)' is running..."
-	@docker start $(DB_CONTAINER_NAME) > /dev/null 2>&1 || \
+	@docker start $(DB_CONTAINER_NAME) || \
 	docker run -d \
 		--name $(DB_CONTAINER_NAME) \
 		-p $(DB_PORT):5432 \
@@ -104,8 +111,8 @@ postgres:
 ## postgres-stop: Stop and remove the local PostgreSQL container.
 postgres-stop:
 	@echo "==> Stopping and removing local PostgreSQL container '$(DB_CONTAINER_NAME)'..."
-	@docker stop $(DB_CONTAINER_NAME) > /dev/null 2>&1 || true
-	@docker rm $(DB_CONTAINER_NAME) > /dev/null 2>&1 || true
+	@docker stop $(DB_CONTAINER_NAME)
+	@docker rm $(DB_CONTAINER_NAME)
 	@echo "==> Container stopped and removed."
 
 ## postgres-logs: Tail the logs of the running local PostgreSQL container.
