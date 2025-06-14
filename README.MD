@@ -8,10 +8,11 @@ Welcome to the **Domain-Driven Golang Task Manager**! 🚀 This is a robust, mod
 
 - 🗂 **DDD Architecture**: Organized into `domain`, `application`, `infrastructure`, `handlers`, `routes`, `dto`, and `common` packages for maintainability and scalability.
 - 📡 **RESTful API**: Create, read, update (via PATCH), and delete tasks with standardized JSON responses.
+- 🔍 **Advanced Querying**: Supports **paging**, **search** by title/description, **sorting** by title/due date/created date, and **filtering** by status (Pending, Doing, Done).
+- 📝 **Generalized Pagination**: Reusable pagination query and response structures in the `common` package for future extensibility.
 - 🗄 **PostgreSQL Integration**: Persistent storage with GORM for seamless database operations.
 - ⚙️ **Cross-Platform Development**: `Makefile` supports Windows, macOS, and Linux with automated PostgreSQL container management.
 - 🔒 **Environment Configuration**: Securely manage database credentials using `.env` and `.env.example`.
-- 📝 **Normalized Responses**: Consistent API responses with `common` package for success and error handling.
 - 🛠 **Extensible**: Ready for adding authentication, validation, or additional features.
 
 ---
@@ -65,17 +66,6 @@ graph TD
 
 ---
 
-## 🛠 Tech Stack
-
-- **Go** (1.24.3) 🐹
-- **Gin** (HTTP framework) 🌐
-- **GORM** (ORM for PostgreSQL) 🗃
-- **PostgreSQL** (16-alpine via Docker) 🐘
-- **godotenv** (Environment variable management) 🔑
-- **Makefile** (Build automation) ⚒
-
----
-
 ## 📂 Project Structure
 
 The project follows DDD principles with a modular structure:
@@ -97,6 +87,17 @@ domain-driven-golang/
 ├── dto/              # Data transfer objects
 └── main.go           # Application entry point
 ```
+
+---
+
+## 🛠 Tech Stack
+
+- **Go** (1.24.3) 🐹
+- **Gin** (HTTP framework) 🌐
+- **GORM** (ORM for PostgreSQL) 🗃
+- **PostgreSQL** (16-alpine via Docker) 🐘
+- **godotenv** (Environment variable management) 🔑
+- **Makefile** (Build automation) ⚒
 
 ---
 
@@ -178,29 +179,65 @@ Follow these steps to set up and run the project locally:
 
 The API follows RESTful conventions with normalized JSON responses. Below are the available endpoints:
 
-| Method | Endpoint          | Description                     | Example Payload                                      |
-|--------|-------------------|---------------------------------|-----------------------------------------------------|
-| `POST` | `/tasks`          | Create a new task               | `{"title":"Task 1","description":"Details"}`        |
-| `GET`  | `/tasks/:id`      | Get a task by ID                | -                                                   |
-| `GET`  | `/tasks`          | Get all tasks                   | -                                                   |
-| `PATCH`| `/tasks/:id`      | Partially update a task         | `{"status":"completed"}`                            |
-| `DELETE` | `/tasks/:id`    | Delete a task                   | -                                                   |
+| Method | Endpoint          | Description                     | Query Parameters / Payload                            |
+|--------|-------------------|---------------------------------|------------------------------------------------------|
+| `POST` | `/tasks`          | Create a new task               | `{"title":"Task 1","description":"Details","due_at":"2025-06-15T12:00:00Z"}` |
+| `GET`  | `/tasks/:id`      | Get a task by ID                | -                                                    |
+| `GET`  | `/tasks`          | Get tasks with pagination, search, sort, and filter | `page`, `page_size`, `search`, `sort_by`, `sort_order`, `status` |
+| `PATCH`| `/tasks/:id`      | Partially update a task         | `{"status":"Done"}`                                  |
+| `DELETE` | `/tasks/:id`    | Delete a task                   | -                                                    |
+
+### GET /tasks Query Parameters
+| Parameter    | Description                              | Example Values                     | Default          |
+|--------------|------------------------------------------|------------------------------------|------------------|
+| `page`       | Page number                              | `1`, `2`                          | `1`              |
+| `page_size`  | Tasks per page                           | `10`, `20`                        | `10`             |
+| `search`     | Keyword to search in title/description   | `groceries`                       | -                |
+| `sort_by`    | Field to sort by                         | `title`, `due_at`, `created_at`   | `created_at`     |
+| `sort_order` | Sort direction                           | `asc`, `desc`                     | `desc`           |
+| `status`     | Filter by task status                    | `Pending`, `Doing`, `Done`        | -                |
 
 ### Example Requests
-
 - **Create Task**:
   ```bash
-  curl -X POST http://localhost:8080/tasks -H "Content-Type: application/json" -d '{"title":"Buy groceries","description":"Milk, eggs, bread"}'
+  curl -X POST http://localhost:8080/tasks -H "Content-Type: application/json" -d '{"title":"Buy groceries","description":"Milk, eggs, bread","due_at":"2025-06-15T12:00:00Z"}'
   ```
-
+- **Get Tasks with Query**:
+  ```bash
+  curl "http://localhost:8080/tasks?page=1&page_size=10&search=groceries&sort_by=title&sort_order=asc&status=Pending"
+  ```
+- **Example Response**:
+  ```json
+  {
+      "success": true,
+      "data": {
+          "tasks": [
+              {
+                  "ID": 1,
+                  "Title": "Buy groceries",
+                  "Description": "Milk, eggs, bread",
+                  "Status": "Pending",
+                  "CreatedAt": "2025-06-14T15:03:00Z",
+                  "UpdatedAt": "2025-06-14T15:03:00Z",
+                  "DueAt": "2025-06-15T12:00:00Z"
+              }
+          ],
+          "meta": {
+              "total": 1,
+              "page": 1,
+              "page_size": 10,
+              "total_pages": 1
+          }
+      }
+  }
+  ```
 - **Update Task (PATCH)**:
   ```bash
-  curl -X PATCH http://localhost:8080/tasks/1 -H "Content-Type: application/json" -d '{"status":"completed"}'
+  curl -X PATCH http://localhost:8080/tasks/1 -H "Content-Type: application/json" -d '{"status":"Done"}'
   ```
-
-- **Get All Tasks**:
+- **Delete Task**:
   ```bash
-  curl http://localhost:8080/tasks
+  curl -X DELETE http://localhost:8080/tasks/1
   ```
 
 ---
@@ -229,7 +266,7 @@ make help
 
 The project uses a PostgreSQL 16-alpine container managed via Docker. The `Makefile` automates its setup:
 
-- **Container Name**: `dev-postgres`
+- **Container Name**: `domain-driven-golang-postgres`
 - **Database**: `tasks_db`
 - **User**: `postgres`
 - **Password**: `12345`
@@ -237,7 +274,8 @@ The project uses a PostgreSQL 16-alpine container managed via Docker. The `Makef
 
 To interact with the database:
 ```bash
-make postgres-shell
+make postgres
+docker exec -it domain-driven-golang-postgres psql -U postgres -d tasks_db
 ```
 
 ---
