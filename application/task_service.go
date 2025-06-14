@@ -3,14 +3,13 @@ package application
 import (
 	"context"
 	"time"
-
 	"github.com/ltphat2204/domain-driven-golang/domain"
 )
 
 type TaskService interface {
 	CreateTask(ctx context.Context, title, description string, dueAt *time.Time) (*domain.Task, error)
 	GetTaskByID(ctx context.Context, id uint) (*domain.Task, error)
-	GetAllTasks(ctx context.Context) ([]*domain.Task, error)
+	GetTasks(ctx context.Context, query *domain.TaskQuery) ([]*domain.Task, int, error)
 	UpdateTask(ctx context.Context, id uint, title, description *string, status *domain.TaskStatus, dueAt *time.Time) (*domain.Task, error)
 	DeleteTask(ctx context.Context, id uint) error
 }
@@ -37,8 +36,8 @@ func (s *taskService) GetTaskByID(ctx context.Context, id uint) (*domain.Task, e
 	return s.repo.FindByID(ctx, id)
 }
 
-func (s *taskService) GetAllTasks(ctx context.Context) ([]*domain.Task, error) {
-	return s.repo.FindAll(ctx)
+func (s *taskService) GetTasks(ctx context.Context, query *domain.TaskQuery) ([]*domain.Task, int, error) {
+	return s.repo.FindTasks(ctx, query)
 }
 
 func (s *taskService) UpdateTask(ctx context.Context, id uint, title, description *string, status *domain.TaskStatus, dueAt *time.Time) (*domain.Task, error) {

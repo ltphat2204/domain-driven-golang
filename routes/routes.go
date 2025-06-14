@@ -8,7 +8,7 @@ import (
 func SetupRoutes(r *gin.Engine, handler *handlers.TaskHandler) {
 	r.POST("/tasks", handler.CreateTask)
 	r.GET("/tasks/:id", handler.GetTask)
-	r.GET("/tasks", handler.GetAllTasks)
+	r.GET("/tasks", handler.GetTasks)
 	r.PATCH("/tasks/:id", handler.UpdateTask)
 	r.DELETE("/tasks/:id", handler.DeleteTask)
 }

@@ -31,13 +31,38 @@ func (r *taskRepository) FindByID(ctx context.Context, id uint) (*domain.Task, e
 	return &task, nil
 }
 
-func (r *taskRepository) FindAll(ctx context.Context) ([]*domain.Task, error) {
-	var tasks []*domain.Task
-	result := r.db.WithContext(ctx).Find(&tasks)
-	if result.Error != nil {
-		return nil, result.Error
+func (r *taskRepository) FindTasks(ctx context.Context, query *domain.TaskQuery) ([]*domain.Task, int, error) {
+	db := r.db.WithContext(ctx).Model(&domain.Task{})
+
+	if query.Search != "" {
+		db = db.Where("title LIKE ? OR description LIKE ?", "%"+query.Search+"%", "%"+query.Search+"%")
 	}
-	return tasks, nil
+
+	if query.Status != nil {
+		db = db.Where("status = ?", *query.Status)
+	}
+
+	var total int64
+	db.Count(&total)
+
+	var tasks []*domain.Task
+	dbQuery := db
+	if query.SortBy != "" && query.SortOrder != "" {
+		dbQuery = db.Order(query.SortBy + " " + query.SortOrder)
+	} else {
+		dbQuery = db.Order("created_at desc")
+	}
+
+	if query.Page > 0 && query.PageSize > 0 {
+		offset := (query.Page - 1) * query.PageSize
+		dbQuery = dbQuery.Offset(offset).Limit(query.PageSize)
+	}
+
+	if err := dbQuery.Find(&tasks).Error; err != nil {
+		return nil, 0, err
+	}
+
+	return tasks, int(total), nil
 }
 
 func (r *taskRepository) Update(ctx context.Context, task *domain.Task) (*domain.Task, error) {
