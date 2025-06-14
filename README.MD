@@ -54,8 +54,6 @@ graph TD
     C -->|Accesses| E[Infrastructure]
     E -->|Persists| F[PostgreSQL]
     D -->|Defines| G[Entities & Rules]
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style F fill:#bbf,stroke:#333,stroke-width:2px
 ```
 
 - **Client**: Sends HTTP requests (e.g., via `curl` or a frontend).
