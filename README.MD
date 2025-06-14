@@ -16,6 +16,57 @@ Welcome to the **Domain-Driven Golang Task Manager**! 🚀 This is a robust, mod
 
 ---
 
+## 🧠 What is Domain-Driven Design (DDD)?
+
+### Overview
+Domain-Driven Design (DDD) is a software design approach introduced by Eric Evans in his book *"Domain-Driven Design: Tackling Complexity in the Heart of Software"*. It focuses on aligning software development with the **business domain** by creating models that reflect real-world processes and concepts. DDD emphasizes collaboration between developers and domain experts to ensure the software solves business problems effectively. 🧩
+
+### Core Concepts
+- **Domain**: The problem space or business area the software addresses (e.g., task management in this project).
+- **Entities**: Objects with unique identities (e.g., a `Task` with an ID).
+- **Value Objects**: Immutable objects without identity (e.g., a task's `Status`).
+- **Aggregates**: Clusters of related objects treated as a single unit (e.g., a `Task` aggregate).
+- **Repositories**: Interfaces for data access, abstracting persistence (e.g., `TaskRepository`).
+- **Services**: Business logic that doesn’t belong to entities or aggregates (e.g., `TaskService`).
+- **Bounded Contexts**: Clear boundaries around specific domains to avoid ambiguity.
+
+### Why Use DDD in This Project?
+This project adopts DDD to create a scalable, maintainable, and business-focused task management system. Here’s why DDD is a great fit:
+- **Clarity**: The `domain` package defines core business entities (`Task`) and rules, making the codebase intuitive for developers and stakeholders. 📋
+- **Separation of Concerns**: Layers like `application`, `infrastructure`, and `handlers` isolate business logic from technical details, improving modularity. 🛠
+- **Scalability**: DDD’s structure supports adding new features (e.g., user authentication, task categories) without disrupting existing code. 📈
+- **Maintainability**: Clear boundaries and abstractions make it easier to refactor or replace components (e.g., switching from PostgreSQL to another database). 🔧
+
+### Problems DDD Solves
+- **Complex Business Logic**: By modeling the domain explicitly, DDD handles intricate task management rules (e.g., task status transitions) in a structured way.
+- **Misalignment with Business Needs**: DDD ensures the software reflects the actual requirements of task management through domain-focused design.
+- **Codebase Chaos**: Without DDD, business logic might mix with infrastructure code, leading to spaghetti code. DDD’s layers prevent this. 🍝
+- **Team Communication**: DDD fosters a shared language (ubiquitous language) between developers and business experts, reducing misunderstandings.
+
+### Visualization of DDD Architecture
+Below is a diagram illustrating the DDD layered architecture in this project, showing how requests flow through the layers to interact with the domain and persistence.
+
+```mermaid
+graph TD
+    A[Client] -->|HTTP Requests| B[Handlers]
+    B -->|Calls| C[Application]
+    C -->|Uses| D[Domain]
+    C -->|Accesses| E[Infrastructure]
+    E -->|Persists| F[PostgreSQL]
+    D -->|Defines| G[Entities & Rules]
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style F fill:#bbf,stroke:#333,stroke-width:2px
+```
+
+- **Client**: Sends HTTP requests (e.g., via `curl` or a frontend).
+- **Handlers**: Processes requests using Gin, validates input with `dto`.
+- **Application**: Orchestrates business logic via `TaskService`.
+- **Domain**: Defines core entities (`Task`) and business rules.
+- **Infrastructure**: Manages persistence with GORM and PostgreSQL.
+- **PostgreSQL**: Stores task data.
+
+---
+
 ## 🛠 Tech Stack
 
 - **Go** (1.24.3) 🐹
