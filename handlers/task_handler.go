@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"github.com/ltphat2204/domain-driven-golang/application"
 	"github.com/ltphat2204/domain-driven-golang/common"
+	"github.com/ltphat2204/domain-driven-golang/domain"
 	"github.com/ltphat2204/domain-driven-golang/dto"
 	"github.com/gin-gonic/gin"
 )
@@ -24,7 +25,7 @@ func (h *TaskHandler) CreateTask(c *gin.Context) {
 		return
 	}
 
-	task, err := h.service.CreateTask(c.Request.Context(), input.Title, input.Description)
+	task, err := h.service.CreateTask(c.Request.Context(), input.Title, input.Description, input.DueAt)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.NewErrorResponse(http.StatusInternalServerError, "Failed to create task", err.Error()))
 		return
@@ -71,7 +72,13 @@ func (h *TaskHandler) UpdateTask(c *gin.Context) {
 		return
 	}
 
-	task, err := h.service.UpdateTask(c.Request.Context(), uint(id), input.Title, input.Description, input.Status)
+	var status *domain.TaskStatus
+	if input.Status != nil {
+		s := domain.TaskStatus(*input.Status)
+		status = &s
+	}
+
+	task, err := h.service.UpdateTask(c.Request.Context(), uint(id), input.Title, input.Description, status, input.DueAt)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.NewErrorResponse(http.StatusInternalServerError, "Failed to update task", err.Error()))
 		return

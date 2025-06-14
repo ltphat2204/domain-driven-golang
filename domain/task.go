@@ -5,12 +5,22 @@ import (
 	"time"
 )
 
+type TaskStatus string
+
+const (
+	StatusPending TaskStatus = "Pending"
+	StatusDoing   TaskStatus = "Doing"
+	StatusDone    TaskStatus = "Done"
+)
+
 type Task struct {
-	ID          uint      `gorm:"primaryKey"`
-	Title       string    `gorm:"not null"`
+	ID          uint        `gorm:"primaryKey"`
+	Title       string      `gorm:"not null"`
 	Description string
-	Status      string    `gorm:"default:'pending'"`
-	CreatedAt   time.Time `gorm:"autoCreateTime"`
+	Status      TaskStatus  `gorm:"type:varchar(10);default:'Pending'"`
+	CreatedAt   time.Time   `gorm:"autoCreateTime"`
+	UpdatedAt   time.Time   `gorm:"autoUpdateTime"`
+	DueAt       *time.Time  `gorm:"type:timestamp"`
 }
 
 type TaskRepository interface {
