@@ -1,14 +1,14 @@
-package routes
+package taskroutes
 
 import (
-	"github.com/ltphat2204/domain-driven-golang/task/handlers"
 	"github.com/gin-gonic/gin"
+	"github.com/ltphat2204/domain-driven-golang/task/handlers"
 )
 
-func SetupRoutes(r *gin.Engine, handler *handlers.TaskHandler) {
-	r.POST("/tasks", handler.CreateTask)
-	r.GET("/tasks/:id", handler.GetTask)
-	r.GET("/tasks", handler.GetTasks)
-	r.PATCH("/tasks/:id", handler.UpdateTask)
-	r.DELETE("/tasks/:id", handler.DeleteTask)
+func SetupRoutes(r *gin.Engine, taskHandler *handlers.TaskHandler) {
+	r.POST("/tasks", taskHandler.CreateTask)
+	r.GET("/tasks/:id", taskHandler.GetTask)
+	r.GET("/tasks", taskHandler.GetTasks)
+	r.PATCH("/tasks/:id", taskHandler.UpdateTask)
+	r.DELETE("/tasks/:id", taskHandler.DeleteTask)
 }

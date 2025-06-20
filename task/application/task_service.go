@@ -7,10 +7,10 @@ import (
 )
 
 type TaskService interface {
-	CreateTask(ctx context.Context, title, description string, dueAt *time.Time) (*domain.Task, error)
+	CreateTask(ctx context.Context, title, description string, dueAt *time.Time, categoryID *uint) (*domain.Task, error)
 	GetTaskByID(ctx context.Context, id uint) (*domain.Task, error)
 	GetTasks(ctx context.Context, query *domain.TaskQuery) ([]*domain.Task, int, error)
-	UpdateTask(ctx context.Context, id uint, title, description *string, status *domain.TaskStatus, dueAt *time.Time) (*domain.Task, error)
+	UpdateTask(ctx context.Context, id uint, title, description *string, status *domain.TaskStatus, dueAt *time.Time, categoryID *uint) (*domain.Task, error)
 	DeleteTask(ctx context.Context, id uint) error
 }
 
@@ -22,12 +22,13 @@ func NewTaskService(repo domain.TaskRepository) TaskService {
 	return &taskService{repo: repo}
 }
 
-func (s *taskService) CreateTask(ctx context.Context, title, description string, dueAt *time.Time) (*domain.Task, error) {
+func (s *taskService) CreateTask(ctx context.Context, title, description string, dueAt *time.Time, categoryID *uint) (*domain.Task, error) {
 	task := &domain.Task{
 		Title:       title,
 		Description: description,
 		Status:      domain.StatusPending,
 		DueAt:       dueAt,
+		CategoryID:  categoryID,
 	}
 	return s.repo.Save(ctx, task)
 }
@@ -40,7 +41,7 @@ func (s *taskService) GetTasks(ctx context.Context, query *domain.TaskQuery) ([]
 	return s.repo.FindTasks(ctx, query)
 }
 
-func (s *taskService) UpdateTask(ctx context.Context, id uint, title, description *string, status *domain.TaskStatus, dueAt *time.Time) (*domain.Task, error) {
+func (s *taskService) UpdateTask(ctx context.Context, id uint, title, description *string, status *domain.TaskStatus, dueAt *time.Time, categoryID *uint) (*domain.Task, error) {
 	task, err := s.repo.FindByID(ctx, id)
 	if err != nil {
 		return nil, err
@@ -57,6 +58,7 @@ func (s *taskService) UpdateTask(ctx context.Context, id uint, title, descriptio
 	if dueAt != nil {
 		task.DueAt = dueAt
 	}
+	task.CategoryID = categoryID // Allow null to remove category
 	return s.repo.Update(ctx, task)
 }
 

@@ -2,14 +2,12 @@ package handlers
 
 import (
 	"net/http"
-	"slices"
 	"strconv"
-
-	"github.com/gin-gonic/gin"
 	"github.com/ltphat2204/domain-driven-golang/task/application"
+	"github.com/ltphat2204/domain-driven-golang/task/dto"
 	"github.com/ltphat2204/domain-driven-golang/common"
 	"github.com/ltphat2204/domain-driven-golang/task/domain"
-	"github.com/ltphat2204/domain-driven-golang/task/dto"
+	"github.com/gin-gonic/gin"
 )
 
 type TaskHandler struct {
@@ -27,7 +25,7 @@ func (h *TaskHandler) CreateTask(c *gin.Context) {
 		return
 	}
 
-	task, err := h.service.CreateTask(c.Request.Context(), input.Title, input.Description, input.DueAt)
+	task, err := h.service.CreateTask(c.Request.Context(), input.Title, input.Description, input.DueAt, input.CategoryID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.NewErrorResponse(http.StatusInternalServerError, "Failed to create task", err.Error()))
 		return
@@ -72,14 +70,24 @@ func (h *TaskHandler) GetTasks(c *gin.Context) {
 	allowedSortFields := []string{"title", "due_at", "created_at"}
 	allowedSortOrders := []string{"asc", "desc"}
 
-	if queryDTO.SortBy != "" && !slices.Contains(allowedSortFields, queryDTO.SortBy) {
+	if queryDTO.SortBy != "" && !contains(allowedSortFields, queryDTO.SortBy) {
 		c.JSON(http.StatusBadRequest, common.NewSimpleErrorResponse("Invalid sort_by"))
 		return
 	}
 
-	if queryDTO.SortOrder != "" && !slices.Contains(allowedSortOrders, queryDTO.SortOrder) {
+	if queryDTO.SortOrder != "" && !contains(allowedSortOrders, queryDTO.SortOrder) {
 		c.JSON(http.StatusBadRequest, common.NewSimpleErrorResponse("Invalid sort_order"))
 		return
+	}
+
+	var status *domain.TaskStatus
+	if queryDTO.Status != "" {
+		s := domain.TaskStatus(queryDTO.Status)
+		if !domain.IsValidTaskStatus(s) {
+			c.JSON(http.StatusBadRequest, common.NewSimpleErrorResponse("Invalid status"))
+			return
+		}
+		status = &s
 	}
 
 	query := &domain.TaskQuery{
@@ -90,15 +98,7 @@ func (h *TaskHandler) GetTasks(c *gin.Context) {
 		Search:    queryDTO.Search,
 		SortBy:    queryDTO.SortBy,
 		SortOrder: queryDTO.SortOrder,
-	}
-
-	if queryDTO.Status != "" {
-		status := domain.TaskStatus(queryDTO.Status)
-		if !domain.IsValidTaskStatus(status) {
-			c.JSON(http.StatusBadRequest, common.NewSimpleErrorResponse("Invalid status"))
-			return
-		}
-		query.Status = &status
+		Status:    status,
 	}
 
 	tasks, total, err := h.service.GetTasks(c.Request.Context(), query)
@@ -150,7 +150,7 @@ func (h *TaskHandler) UpdateTask(c *gin.Context) {
 		status = &s
 	}
 
-	task, err := h.service.UpdateTask(c.Request.Context(), uint(id), input.Title, input.Description, status, input.DueAt)
+	task, err := h.service.UpdateTask(c.Request.Context(), uint(id), input.Title, input.Description, status, input.DueAt, input.CategoryID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, common.NewErrorResponse(http.StatusInternalServerError, "Failed to update task", err.Error()))
 		return
@@ -172,4 +172,13 @@ func (h *TaskHandler) DeleteTask(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, common.NewSimpleSuccessResponse("Task deleted"))
+}
+
+func contains(slice []string, item string) bool {
+	for _, s := range slice {
+		if s == item {
+			return true
+		}
+	}
+	return false
 }
