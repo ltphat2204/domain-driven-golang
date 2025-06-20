@@ -5,18 +5,21 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"gorm.io/gorm"
+
 	categoryApplication "github.com/ltphat2204/domain-driven-golang/category/application"
 	categoryDomain "github.com/ltphat2204/domain-driven-golang/category/domain"
 	categoryHandler "github.com/ltphat2204/domain-driven-golang/category/handler"
 	categoryInfrastructure "github.com/ltphat2204/domain-driven-golang/category/infrastructure"
 	categoryRoutes "github.com/ltphat2204/domain-driven-golang/category/route"
-	"github.com/ltphat2204/domain-driven-golang/config"
-	"github.com/ltphat2204/domain-driven-golang/routes"
+
+	taskRoutes "github.com/ltphat2204/domain-driven-golang/task/route"
 	taskApplication "github.com/ltphat2204/domain-driven-golang/task/application"
 	taskDomain "github.com/ltphat2204/domain-driven-golang/task/domain"
 	taskHandler "github.com/ltphat2204/domain-driven-golang/task/handlers"
 	taskInfrastructure "github.com/ltphat2204/domain-driven-golang/task/infrastructure"
-	"gorm.io/gorm"
+
+	"github.com/ltphat2204/domain-driven-golang/config"
 )
 
 var db *gorm.DB
@@ -47,7 +50,7 @@ func main() {
 	r := gin.Default()
 
 	categoryRoutes.SetupRoutes(r, categoryHandler)
-	routes.SetupRoutes(r, taskHandler)
+	taskRoutes.SetupRoutes(r, taskHandler)
 
 	r.Run(":8080")
 }
