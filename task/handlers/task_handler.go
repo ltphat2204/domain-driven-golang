@@ -6,10 +6,10 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/ltphat2204/domain-driven-golang/application"
+	"github.com/ltphat2204/domain-driven-golang/task/application"
 	"github.com/ltphat2204/domain-driven-golang/common"
-	"github.com/ltphat2204/domain-driven-golang/domain"
-	"github.com/ltphat2204/domain-driven-golang/dto"
+	"github.com/ltphat2204/domain-driven-golang/task/domain"
+	"github.com/ltphat2204/domain-driven-golang/task/dto"
 )
 
 type TaskHandler struct {

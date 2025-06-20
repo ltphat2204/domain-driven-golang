@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/ltphat2204/domain-driven-golang/handlers"
+	"github.com/ltphat2204/domain-driven-golang/task/handlers"
 	"github.com/gin-gonic/gin"
 )
 

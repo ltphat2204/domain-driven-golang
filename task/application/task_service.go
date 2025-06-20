@@ -3,7 +3,7 @@ package application
 import (
 	"context"
 	"time"
-	"github.com/ltphat2204/domain-driven-golang/domain"
+	"github.com/ltphat2204/domain-driven-golang/task/domain"
 )
 
 type TaskService interface {
