@@ -149,10 +149,9 @@ Follow these steps to set up and run the project locally:
      ```bash
      make run
      ```
-   - This command:
-     - Starts a PostgreSQL 16-alpine container (if not already running).
-     - Updates `.env` with database credentials.
-     - Runs the Go application on `http://localhost:8080`.
+   - This command runs the Go application on `http://localhost:8080`.
+
+  Maybe you need to run `make postgres` first to start the PostgreSQL container if it's not already running.
 
 5. **Verify the API** 🌐
    - Test the `POST /tasks` endpoint:
@@ -252,7 +251,7 @@ make help
 
 | Command          | Description                                      |
 |------------------|--------------------------------------------------|
-| `make run`       | Start PostgreSQL and run the Go app             |
+| `make run`       | Run the Go app             |
 | `make build`     | Build the executable (`bin/domain-driven-golang`) |
 | `make test`      | Run Go tests                                    |
 | `make postgres`  | Start the PostgreSQL container                  |
