@@ -3,11 +3,11 @@ package main
 import (
 	"log"
 
-	"github.com/ltphat2204/domain-driven-golang/application"
+	"github.com/ltphat2204/domain-driven-golang/task/application"
 	"github.com/ltphat2204/domain-driven-golang/config"
-	"github.com/ltphat2204/domain-driven-golang/domain"
-	"github.com/ltphat2204/domain-driven-golang/handlers"
-	"github.com/ltphat2204/domain-driven-golang/infrastructure"
+	"github.com/ltphat2204/domain-driven-golang/task/domain"
+	"github.com/ltphat2204/domain-driven-golang/task/handlers"
+	"github.com/ltphat2204/domain-driven-golang/task/infrastructure"
 	"github.com/ltphat2204/domain-driven-golang/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"

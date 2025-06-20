@@ -3,7 +3,7 @@ package dto
 import (
 	"time"
 	"github.com/ltphat2204/domain-driven-golang/common"
-	"github.com/ltphat2204/domain-driven-golang/domain"
+	"github.com/ltphat2204/domain-driven-golang/task/domain"
 )
 
 type TaskCreateDTO struct {
