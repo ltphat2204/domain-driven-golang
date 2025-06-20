@@ -3,7 +3,7 @@ SERVICE_NAME := domain-driven-golang
 
 # PostgreSQL Dependency (for local 'make run')
 DB_CONTAINER_NAME := dev-postgres
-DB_IMAGE          := postgres:16-alpine
+DB_IMAGE          := postgres:17-alpine
 DB_PORT           := 5432
 DB_VOLUME         := dev-postgres-data
 DB_NAME           := tasks_db
@@ -59,8 +59,8 @@ help:
 
 .PHONY: run build test clean-build
 
-## run: Ensure local DB is running, then run the Go application.
-run: postgres
+## run: Run the Go application.
+run:
 	@echo "==> Starting Go service '$(SERVICE_NAME)'..."
 	@echo "==> Note: Your service must be configured to connect to localhost:$(DB_PORT)."
 	@go run main.go
@@ -97,8 +97,7 @@ clean-build:
 ## postgres: Start the local PostgreSQL container if stopped, or create it if it doesn’t exist.
 postgres:
 	@echo "==> Ensuring local PostgreSQL container '$(DB_CONTAINER_NAME)' is running..."
-	@docker start $(DB_CONTAINER_NAME) || \
-	docker run -d \
+	@docker run -d \
 		--name $(DB_CONTAINER_NAME) \
 		-p $(DB_PORT):5432 \
 		-e POSTGRES_DB=$(DB_NAME) \

@@ -2,21 +2,23 @@ package dto
 
 import (
 	"time"
-	"github.com/ltphat2204/domain-driven-golang/common"
 	"github.com/ltphat2204/domain-driven-golang/task/domain"
+	"github.com/ltphat2204/domain-driven-golang/common"
 )
 
 type TaskCreateDTO struct {
 	Title       string     `json:"title" binding:"required"`
 	Description string     `json:"description"`
 	DueAt       *time.Time `json:"due_at"`
+	CategoryID  *uint      `json:"category_id"`
 }
 
 type TaskUpdateDTO struct {
-	Title       *string     `json:"title"`
-	Description *string     `json:"description"`
-	Status      *string     `json:"status"`
-	DueAt       *time.Time  `json:"due_at"`
+	Title       *string    `json:"title"`
+	Description *string    `json:"description"`
+	Status      *string    `json:"status"`
+	DueAt       *time.Time `json:"due_at"`
+	CategoryID  *uint      `json:"category_id"`
 }
 
 type TaskQueryDTO struct {

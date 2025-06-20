@@ -24,7 +24,7 @@ func (r *taskRepository) Save(ctx context.Context, task *domain.Task) (*domain.T
 
 func (r *taskRepository) FindByID(ctx context.Context, id uint) (*domain.Task, error) {
 	var task domain.Task
-	result := r.db.WithContext(ctx).First(&task, id)
+	result := r.db.WithContext(ctx).Preload("Category").First(&task, id)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -32,7 +32,7 @@ func (r *taskRepository) FindByID(ctx context.Context, id uint) (*domain.Task, e
 }
 
 func (r *taskRepository) FindTasks(ctx context.Context, query *domain.TaskQuery) ([]*domain.Task, int, error) {
-	db := r.db.WithContext(ctx).Model(&domain.Task{})
+	db := r.db.WithContext(ctx).Preload("Category").Model(&domain.Task{})
 
 	if query.Search != "" {
 		db = db.Where("title LIKE ? OR description LIKE ?", "%"+query.Search+"%", "%"+query.Search+"%")

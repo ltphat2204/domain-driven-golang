@@ -3,7 +3,7 @@ package domain
 import (
 	"context"
 	"time"
-
+	"github.com/ltphat2204/domain-driven-golang/category/domain"
 	"github.com/ltphat2204/domain-driven-golang/common"
 )
 
@@ -16,13 +16,15 @@ const (
 )
 
 type Task struct {
-	ID          uint        `gorm:"primaryKey"`
-	Title       string      `gorm:"not null"`
+	ID          uint             `gorm:"primaryKey"`
+	Title       string           `gorm:"not null"`
 	Description string
-	Status      TaskStatus  `gorm:"type:varchar(10);default:'Pending'"`
-	CreatedAt   time.Time   `gorm:"autoCreateTime"`
-	UpdatedAt   time.Time   `gorm:"autoUpdateTime"`
-	DueAt       *time.Time  `gorm:"type:timestamp"`
+	Status      TaskStatus       `gorm:"type:varchar(10);default:'Pending'"`
+	CreatedAt   time.Time        `gorm:"autoCreateTime"`
+	UpdatedAt   time.Time        `gorm:"autoUpdateTime"`
+	DueAt       *time.Time       `gorm:"type:timestamp"`
+	CategoryID  *uint            `gorm:"foreignKey:CategoryID"` // Foreign key for Category
+	Category    *domain.Category `gorm:"foreignKey:CategoryID"` // Association with Category
 }
 
 type TaskQuery struct {
