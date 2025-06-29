@@ -6,9 +6,9 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/ltphat2204/domain-driven-golang/category/domain"
-	"github.com/ltphat2204/domain-driven-golang/category/dto"
-	"github.com/ltphat2204/domain-driven-golang/category/application"
+	"github.com/ltphat2204/domain-driven-golang/modules/category/application"
+	"github.com/ltphat2204/domain-driven-golang/modules/category/domain"
+	"github.com/ltphat2204/domain-driven-golang/modules/category/dto"
 	"github.com/ltphat2204/domain-driven-golang/common"
 )
 
@@ -84,8 +84,8 @@ func (h *CategoryHandler) GetCategories(c *gin.Context) {
 
 	query := &domain.CategoryQuery{
 		BaseQuery: common.BaseQuery{
-			Page:      page,
-			PageSize:  pageSize,
+			Page:     page,
+			PageSize: pageSize,
 		},
 		Search:    queryDTO.Search,
 		SortBy:    queryDTO.SortBy,

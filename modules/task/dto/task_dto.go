@@ -2,8 +2,9 @@ package dto
 
 import (
 	"time"
-	"github.com/ltphat2204/domain-driven-golang/task/domain"
+
 	"github.com/ltphat2204/domain-driven-golang/common"
+	"github.com/ltphat2204/domain-driven-golang/modules/task/domain"
 )
 
 type TaskCreateDTO struct {
@@ -31,6 +32,6 @@ type TaskQueryDTO struct {
 }
 
 type TaskListResponse struct {
-	Tasks []*domain.Task      `json:"tasks"`
+	Tasks []*domain.Task        `json:"tasks"`
 	Meta  common.PaginationMeta `json:"meta"`
 }

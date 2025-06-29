@@ -3,7 +3,8 @@ package application
 import (
 	"context"
 	"fmt"
-	"github.com/ltphat2204/domain-driven-golang/category/domain"
+
+	"github.com/ltphat2204/domain-driven-golang/modules/category/domain"
 	"github.com/ltphat2204/domain-driven-golang/config"
 	"github.com/ltphat2204/domain-driven-golang/utils"
 )

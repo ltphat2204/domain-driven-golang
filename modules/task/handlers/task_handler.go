@@ -3,11 +3,12 @@ package handlers
 import (
 	"net/http"
 	"strconv"
-	"github.com/ltphat2204/domain-driven-golang/task/application"
-	"github.com/ltphat2204/domain-driven-golang/task/dto"
-	"github.com/ltphat2204/domain-driven-golang/common"
-	"github.com/ltphat2204/domain-driven-golang/task/domain"
+
 	"github.com/gin-gonic/gin"
+	"github.com/ltphat2204/domain-driven-golang/common"
+	"github.com/ltphat2204/domain-driven-golang/modules/task/application"
+	"github.com/ltphat2204/domain-driven-golang/modules/task/domain"
+	"github.com/ltphat2204/domain-driven-golang/modules/task/dto"
 )
 
 type TaskHandler struct {
@@ -92,8 +93,8 @@ func (h *TaskHandler) GetTasks(c *gin.Context) {
 
 	query := &domain.TaskQuery{
 		BaseQuery: common.BaseQuery{
-			Page:      page,
-			PageSize:  pageSize,
+			Page:     page,
+			PageSize: pageSize,
 		},
 		Search:    queryDTO.Search,
 		SortBy:    queryDTO.SortBy,

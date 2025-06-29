@@ -2,7 +2,8 @@ package infrastructure
 
 import (
 	"context"
-	"github.com/ltphat2204/domain-driven-golang/task/domain"
+
+	"github.com/ltphat2204/domain-driven-golang/modules/task/domain"
 	"gorm.io/gorm"
 )
 

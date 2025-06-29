@@ -1,7 +1,7 @@
 package dto
 
 import (
-	"github.com/ltphat2204/domain-driven-golang/category/domain"
+	"github.com/ltphat2204/domain-driven-golang/modules/category/domain"
 	"github.com/ltphat2204/domain-driven-golang/common"
 )
 

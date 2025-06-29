@@ -2,7 +2,7 @@ package route
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/ltphat2204/domain-driven-golang/category/handler"
+	"github.com/ltphat2204/domain-driven-golang/modules/category/handler"
 )
 
 func SetupRoutes(r *gin.Engine, categoryHandler *handler.CategoryHandler) {

@@ -2,7 +2,7 @@ package taskroutes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/ltphat2204/domain-driven-golang/task/handlers"
+	"github.com/ltphat2204/domain-driven-golang/modules/task/handlers"
 )
 
 func SetupRoutes(r *gin.Engine, taskHandler *handlers.TaskHandler) {
