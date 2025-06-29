@@ -3,7 +3,8 @@ package domain
 import (
 	"context"
 	"time"
-	"github.com/ltphat2204/domain-driven-golang/category/domain"
+
+	"github.com/ltphat2204/domain-driven-golang/modules/category/domain"
 	"github.com/ltphat2204/domain-driven-golang/common"
 )
 
@@ -16,8 +17,8 @@ const (
 )
 
 type Task struct {
-	ID          uint             `gorm:"primaryKey"`
-	Title       string           `gorm:"not null"`
+	ID          uint   `gorm:"primaryKey"`
+	Title       string `gorm:"not null"`
 	Description string
 	Status      TaskStatus       `gorm:"type:varchar(10);default:'Pending'"`
 	CreatedAt   time.Time        `gorm:"autoCreateTime"`

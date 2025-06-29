@@ -7,17 +7,17 @@ import (
 	"github.com/joho/godotenv"
 	"gorm.io/gorm"
 
-	categoryApplication "github.com/ltphat2204/domain-driven-golang/category/application"
-	categoryDomain "github.com/ltphat2204/domain-driven-golang/category/domain"
-	categoryHandler "github.com/ltphat2204/domain-driven-golang/category/handler"
-	categoryInfrastructure "github.com/ltphat2204/domain-driven-golang/category/infrastructure"
-	categoryRoutes "github.com/ltphat2204/domain-driven-golang/category/route"
+	categoryApplication "github.com/ltphat2204/domain-driven-golang/modules/category/application"
+	categoryDomain "github.com/ltphat2204/domain-driven-golang/modules/category/domain"
+	categoryHandler "github.com/ltphat2204/domain-driven-golang/modules/category/handler"
+	categoryInfrastructure "github.com/ltphat2204/domain-driven-golang/modules/category/infrastructure"
+	categoryRoutes "github.com/ltphat2204/domain-driven-golang/modules/category/route"
 
-	taskRoutes "github.com/ltphat2204/domain-driven-golang/task/route"
-	taskApplication "github.com/ltphat2204/domain-driven-golang/task/application"
-	taskDomain "github.com/ltphat2204/domain-driven-golang/task/domain"
-	taskHandler "github.com/ltphat2204/domain-driven-golang/task/handlers"
-	taskInfrastructure "github.com/ltphat2204/domain-driven-golang/task/infrastructure"
+	taskApplication "github.com/ltphat2204/domain-driven-golang/modules/task/application"
+	taskDomain "github.com/ltphat2204/domain-driven-golang/modules/task/domain"
+	taskHandler "github.com/ltphat2204/domain-driven-golang/modules/task/handlers"
+	taskInfrastructure "github.com/ltphat2204/domain-driven-golang/modules/task/infrastructure"
+	taskRoutes "github.com/ltphat2204/domain-driven-golang/modules/task/route"
 
 	"github.com/ltphat2204/domain-driven-golang/config"
 )
@@ -42,7 +42,7 @@ func main() {
 	taskRepo := taskInfrastructure.NewTaskRepository(db)
 	taskService := taskApplication.NewTaskService(taskRepo)
 	taskHandler := taskHandler.NewTaskHandler(taskService)
-	
+
 	categoryRepo := categoryInfrastructure.NewCategoryRepository(db)
 	categoryService := categoryApplication.NewCategoryService(categoryRepo)
 	categoryHandler := categoryHandler.NewCategoryHandler(categoryService)

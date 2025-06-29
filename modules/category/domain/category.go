@@ -3,12 +3,13 @@ package domain
 import (
 	"context"
 	"time"
+
 	"github.com/ltphat2204/domain-driven-golang/common"
 )
 
 type Category struct {
-	ID          uint      `gorm:"primaryKey"`
-	Name        string    `gorm:"not null"`
+	ID          uint   `gorm:"primaryKey"`
+	Name        string `gorm:"not null"`
 	Description string
 	Color       string    `gorm:"type:varchar(7)"`
 	CreatedAt   time.Time `gorm:"autoCreateTime"`

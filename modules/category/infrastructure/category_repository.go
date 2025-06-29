@@ -2,7 +2,8 @@ package repository
 
 import (
 	"context"
-	"github.com/ltphat2204/domain-driven-golang/category/domain"
+
+	"github.com/ltphat2204/domain-driven-golang/modules/category/domain"
 	"gorm.io/gorm"
 )
 
